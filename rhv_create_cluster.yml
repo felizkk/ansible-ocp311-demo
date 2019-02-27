@@ -30,6 +30,12 @@
     with_items:
       - ocp311-master1.{{ rhv_domain_name }}
       - ocp311-master2.{{ rhv_domain_name }}
+      - ocp311-master3.{{ rhv_domain_name }}      
+      - ocp311-infra1.{{ rhv_domain_name }}
+      - ocp311-infra2.{{ rhv_domain_name }}
+      - ocp311-node1.{{ rhv_domain_name }}
+      - ocp311-node2.{{ rhv_domain_name }} 
+      - ocp311-node3.{{ rhv_domain_name }}
 
   - name: Power Up All OCP VMs 
     ovirt_vm:
@@ -42,4 +48,10 @@
       - ocp311-lb.{{ rhv_domain_name }}
       - ocp311-master1.{{ rhv_domain_name }}
       - ocp311-master2.{{ rhv_domain_name }}
+      - ocp311-master3.{{ rhv_domain_name }}      
+      - ocp311-infra1.{{ rhv_domain_name }}
+      - ocp311-infra2.{{ rhv_domain_name }}
+      - ocp311-node1.{{ rhv_domain_name }}
+      - ocp311-node2.{{ rhv_domain_name }} 
+      - ocp311-node3.{{ rhv_domain_name }}      
 ...
