@@ -4,29 +4,42 @@
   connection: local
   gather_facts: no
 
+  # Get these vars from Survey:
+  # - rhv_domain_name, rhv_cluster_name
+  # - rhv_node_template_name, rhv_rhel_template_name
+
   tasks:
-  - name: Creates Bastion Host
+  - name: Creates OCP 3.11 Bastion and LB Hosts
     ovirt_vm:
       state: present
-      name: ocp311-bastion.internal.pineview.co.nz
-      template: tmp_ocp_rhel76_master_20190227
-      cluster: Pineview-Cluster-OCP
-      description: OCP 3.11 Bastion Host
+      name: "{{ item }}" 
+      template: "{{ rhv_rhel_template_name }}"
+      cluster: "{{ rhv_cluster_name }}"
       comment: OCP 3.11
-      cloud_init:
-        nic_name: eth0
-        nic_boot_protocol: static
-        nic_ip_address: 10.68.158.80
-        nic_netmask: 255.255.255.0
-        nic_gateway: 10.68.158.254
-        nic_on_boot: true
-        dns_servers: 10.68.158.11 10.68.158.12
-        dns_search: internal.pineview.co.nz
+    with_items:
+      - ocp311-bastion.{{ rhv_domain_name }}
+      - ocp311-lb.{{ rhv_domain_name }}
 
-  - name: Power Up VM if needed
+  - name: Creates OCP 3.11 Master, Infra, and Worker Nodes
+    ovirt_vm:
+      state: present
+      name: "{{ item }}" 
+      template: "{{ rhv_node_template_name }}"
+      cluster: "{{ rhv_cluster_name }}"
+      comment: OCP 3.11
+    with_items:
+      - ocp311-master1.{{ rhv_domain_name }}
+      - ocp311-master2.{{ rhv_domain_name }}
+
+  - name: Power Up All OCP VMs 
     ovirt_vm:
       state: running
-      name: ocp311-bastion.internal.pineview.co.nz
-      cluster: Pineview-Cluster-OCP
+      name: "{{ item }}"
+      cluster: "{{ rhv_cluster_name }}"
       wait: no
+    with_items:
+      - ocp311-bastion.{{ rhv_domain_name }}
+      - ocp311-lb.{{ rhv_domain_name }}
+      - ocp311-master1.{{ rhv_domain_name }}
+      - ocp311-master2.{{ rhv_domain_name }}
 ...

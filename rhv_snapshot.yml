@@ -1,0 +1,13 @@
+---
+- name: RHV Snapshot Creation
+  hosts: "{{ target_host_name }}*"
+  gather_facts: no
+
+  tasks:
+  - ovirt_vm:
+      vm_name: "{{ name }}"
+      description: "{{ snapshot_name }}"
+      use_memory: true
+    register: snapshot
+    delegate_to: localhost
+...
