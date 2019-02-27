@@ -1,5 +1,5 @@
 ---
-- name: Register and Enable Repos on OCP 3.11 Nodes
+- name: Subscribe and Enable Repos on OCP 3.11 Nodes
   hosts: "{{ target_host_name }}*"
   gather_facts: no
 
@@ -9,7 +9,7 @@
       # The variable name is sourced from dynamic inventory variable
       name: "{{ name }}"
     
-  - name: Register and attach RHEL Subscription Pool ID
+  - name: Subscribe and attach RHEL Subscription Pool ID
     redhat_subscription:
       state: present
       # Get these values from Survey
